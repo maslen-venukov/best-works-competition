@@ -4,10 +4,7 @@
 :root {
   --dark-color: #171820;
   --accent-color: #ff004c;
-}
-
-.btn {
-  background-color: var(--accent-color);
+  --pink-color: #ee6e73;
 }
 
 html,
@@ -15,8 +12,12 @@ body {
   font-family: -apple-system, BlinkMacSystemFont, Arial, Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
 }
 
-.nav {
-  position: absolute;
+.title {
+  margin-bottom: 40px;
+}
+
+.nav.dark {
+  background-color: var(--dark-color);
 }
 
 .intro {
@@ -49,4 +50,38 @@ body {
   font-size: 12px;
   letter-spacing: 0.2em;
   text-transform: uppercase;
+}
+
+.profile.row {
+  margin-bottom: 0;
+}
+
+.profile .col {
+  padding: 0;
+}
+
+.sidebar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 16.6666666667%;
+  height: 100vh;
+  color: #fff;
+  background-color: var(--pink-color);
+  overflow-y: auto;
+}
+
+.sidebar nav li {
+  width: 100%;
+}
+
+.works__item.collection-item {
+  position: relative;
+  padding-right: 40px;
+}
+
+.works__remove {
+  position: absolute;
+  top: 5px;
+  right: 5px;
 }

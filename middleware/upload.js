@@ -3,16 +3,17 @@ import { v4 } from 'uuid'
 
 const storage = diskStorage({
   destination: (req, file, cb) => {
-    cb(null, 'uploads/')
+    cb(null, 'uploads')
   },
   filename: (req, file, cb) => {
-    const ext = file.originalname.split('.').pop()
-    cb(null, `${v4()}.${ext}`)
+    const arr = file.originalname.split('.')
+    const ext = arr.pop()
+    cb(null, `${arr.join('.')}-${v4()}.${ext}`)
   }
 })
 
 const fileFilter = (req, file, cb) => {
-  if(file.mimetype.includes('image')) {
+  if(file.mimetype.includes('application')) {
     cb(null, true);
   } else {
     cb(null, false);

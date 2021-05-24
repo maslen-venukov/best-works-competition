@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="ru">
+  <%- include('partials/head', { title }) %>
+  <body>
+    <div class="send profile row">
+      <%- include('partials/sidebar') %>
+      <div class="col s10">
+        <div class="container">
+          <h4 class="title">Отправить работу</h4>
+          <form data-form="send-work">
+            <div class="row">
+              <div class="input-field col s12">
+                <input id="name" type="text" name="name" required class="validate">
+                <label for="name">Название работы</label>
+              </div>
+            </div>
+            <div class="row">
+              <div class="input-field col s12">
+                <select>
+                  <option value="" disabled selected>Выберите номинацию</option>
+                  <% nominatios.forEach(nomination => { %>
+                    <option value="<%= nomination._id %>"><%= nomination.name %></option>
+                  <% }) %>
+                </select>
+                <label>Номинация</label>
+              </div>
+            </div>
+            <div class="row">
+              <div class="input-field col s12">
+                <input type="file" name="file" accept="application/*" required>
+              </div>
+            </div>
+            <button class="btn waves-effect waves-light" type="submit">
+              Отправить
+              <i class="material-icons right">send</i>
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

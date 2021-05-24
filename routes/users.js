@@ -7,7 +7,8 @@ const router = Router()
 
 router.post('/register', controller.register)
 router.post('/login', controller.login)
-router.get('/logout', controller.logout)
+router.post('/logout', controller.logout)
+router.put('/', auth, controller.update)
 router.post('/auth', auth, controller.auth)
 
 export default router

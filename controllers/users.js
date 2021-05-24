@@ -37,8 +37,9 @@ class Controller {
       const hash = bcrypt.hashSync(password, 7)
 
       const user = new User({ surname, name, patronymic, email, password: hash })
+      const { _id, role } = user
 
-      const token = `Bearer ${jwt.sign({ id: user._id, surname, name, patronymic, email }, process.env.SECRET_KEY, { expiresIn: '24h' })}`
+      const token = `Bearer ${jwt.sign({ _id, surname, name, patronymic, email, role }, process.env.SECRET_KEY, { expiresIn: '24h' })}`
 
       await user.save()
       return res
@@ -70,8 +71,8 @@ class Controller {
       if(!user || !isMatch)
         return errorHandler(res, 400, 'Неверный логин или пароль')
 
-      const { surname, name, patronymic } = user
-      const token = `Bearer ${jwt.sign({ id: user._id, surname, name, patronymic, email }, process.env.SECRET_KEY, { expiresIn: '24h' })}`
+      const { _id, surname, name, patronymic, role } = user
+      const token = `Bearer ${jwt.sign({ _id, surname, name, patronymic, email, role }, process.env.SECRET_KEY, { expiresIn: '24h' })}`
 
       return res
         .cookie('token', token, {
@@ -92,7 +93,7 @@ class Controller {
           httpOnly: true,
           expires: new Date(0)
         })
-        .send()
+        .json({})
     } catch (e) {
       console.log(e)
       return errorHandler(res)
@@ -101,10 +102,11 @@ class Controller {
 
   async auth(req, res) {
     try {
-      const { id, email } = req.user
+      const { _id, email } = req.user
       const user = await User.findById(id)
+      const { role } = user
 
-      const token = `Bearer ${jwt.sign({ id: user._id, surname, name, patronymic, email }, process.env.SECRET_KEY, { expiresIn: '24h' })}`
+      const token = `Bearer ${jwt.sign({ _id, surname, name, patronymic, email, role }, process.env.SECRET_KEY, { expiresIn: '24h' })}`
 
       return res
         .cookie('token', token, {
@@ -112,6 +114,51 @@ class Controller {
           maxAge
         })
         .json({ token })
+    } catch (e) {
+      console.log(e)
+      return errorHandler(res)
+    }
+  }
+
+  async update(req, res) {
+    try {
+      const { _id: currentId, role: currentRole } = req.user
+      const { _id, surname, name, patronymic, email, organization, position, nomination, academic_rank, academic_degree, role } = req.body
+
+      let user = null
+
+      user = currentRole === 'ADMIN'
+        ? await User.findById(_id)
+        : await User.findById(currentId)
+
+      user.surname = surname || user.surname
+      user.name = name || user.name
+      user.patronymic = patronymic || user.patronymic
+      user.email = email || user.email
+      user.organization = organization || user.organization
+      user.position = position || user.position
+
+      switch(currentRole) {
+        case 'EXPERT': {
+          user.nomination = nomination || user.nomination
+          user.academic_rank = academic_rank || user.academic_rank
+          user.academic_degree = academic_degree || user.academic_degree
+          break;
+        }
+
+        case 'ADMIN': {
+          user.nomination = nomination || user.nomination
+          user.academic_rank = academic_rank || user.academic_rank
+          user.academic_degree = academic_degree || user.academic_degree
+          user.role = role || user.role
+        }
+
+        default:
+          break;
+      }
+
+      await user.save()
+      return res.json({ message: 'Изменения сохранены' })
     } catch (e) {
       console.log(e)
       return errorHandler(res)

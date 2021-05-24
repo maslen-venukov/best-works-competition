@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="ru">
+  <%- include('partials/head', { title }) %>
+  <body>
+    <div class="settings profile row">
+      <%- include('partials/sidebar') %>
+      <div class="col s10">
+        <div class="container">
+          <h4 class="title">Настройки</h4>
+          <% if(user.role === 'USER') { %>
+            <form data-form="settings">
+              <div class="row">
+                <div class="input-field col s4">
+                  <input id="surname" type="text" name="surname" value="<%= user.surname %>" required class="validate">
+                  <label for="surname">Фамилия</label>
+                </div>
+                <div class="input-field col s4">
+                  <input id="name" type="text" name="name" value="<%= user.name %>" required class="validate">
+                  <label for="name">Имя</label>
+                </div>
+                <div class="input-field col s4">
+                  <input id="patronymic" type="text" name="patronymic" value="<%= user.patronymic %>" required class="validate">
+                  <label for="patronymic">Отчество</label>
+                </div>
+              </div>
+              <div class="row">
+                <div class="input-field col s12">
+                  <input id="email" type="email" name="email" value="<%= user.email %>" required class="validate">
+                  <label for="email">Email</label>
+                </div>
+              </div>
+              <div class="row">
+                <div class="input-field col s12">
+                  <input id="organization" type="text" name="organization" value="<%= user.organization %>" required class="validate">
+                  <label for="organization">Организация</label>
+                </div>
+              </div>
+              <div class="row">
+                <div class="input-field col s12">
+                  <input id="position" type="text" name="position" value="<%= user.position %>" required class="validate">
+                  <label for="position">Должность</label>
+                </div>
+              </div>
+              <button class="btn waves-effect waves-light" type="submit">
+                Сохранить
+                <i class="material-icons right">send</i>
+              </button>
+            </form>
+          <% } %>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

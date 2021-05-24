@@ -9,9 +9,9 @@ const schema = new Schema({
   email: { type: String, required: true, unique: true },
   password: { type: String, required: true },
   role: { type: String, default: 'USER' },
-  organization: { type: ObjectId, ref: 'Organization' },
-  nomination: { type: ObjectId, ref: 'Nomination' },
+  organization: { type: String },
   position: { type: String },
+  nomination: { type: ObjectId, ref: 'Nomination' },
   academic_rank: { type: String },
   academic_degree: { type: String }
 })

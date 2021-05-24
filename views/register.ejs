@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+  <%- include('partials/head', { title }) %>
+  <body>
+    <div class="intro center">
+      <div class="container">
+        <h2>Регистрация</h2>
+        <form data-form="register">
+          <div class="input-field">
+            <input id="name" type="text" name="surname" class="validate" required>
+            <label for="name">Фамилия</label>
+          </div>
+          <div class="input-field">
+            <input id="age" type="text" name="name" class="validate" required>
+            <label for="age">Имя</label>
+          </div>
+          <div class="input-field">
+            <input id="patronymic" type="text" name="patronymic" class="validate" required>
+            <label for="patronymic">Отчество</label>
+          </div>
+          <div class="input-field">
+            <input id="email" type="email" name="email" class="validate" required>
+            <label for="email">Электронная почта</label>
+          </div>
+          <div class="input-field">
+            <input id="password" type="password" name="password" class="validate" required>
+            <label for="password">Пароль</label>
+          </div>
+          <div class="input-field">
+            <input id="passwordCheck" type="password" name="passwordCheck" class="validate" required>
+            <label for="passwordCheck">Повторите пароль</label>
+          </div>
+          <button class="waves-effect waves-light btn">Зарегистрироваться</button>
+        </form>
+      </div>
+    </div>
+  </body>
+</html>

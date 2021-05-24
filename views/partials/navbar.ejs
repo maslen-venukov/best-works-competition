@@ -1,0 +1,23 @@
+<nav class="nav transparent z-depth-0">
+  <div class="container">
+    <div class="nav-wrapper">
+      <a href="#" data-target="mobile-demo" class="sidenav-trigger"><i class="material-icons">menu</i></a>
+      <ul class="left hide-on-med-and-down">
+        <li><a href="/about">О конкурсе</a></li>
+        <li><a href="/contacts">Контакты</a></li>
+      </ul>
+      <ul class="right">
+        <% if(user) { %>
+          <li><a href="#" class="logout">Выйти</a></li>
+        <% } else { %>
+          <li><a href="/register">Зарегистрироваться</a></li>
+          <li><a href="/login">Войти</a></li>
+        <% } %>
+      </ul>
+    </div>
+  </div>
+</nav>
+<ul class="sidenav" id="mobile-demo">
+  <li><a href="/about">О конкурсе</a></li>
+  <li><a href="/contacts">Контакты</a></li>
+</ul>

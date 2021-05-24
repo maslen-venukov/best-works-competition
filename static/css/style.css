@@ -1,0 +1,52 @@
+@import url('./_normalize.css');
+@import url('./_reset.css');
+
+:root {
+  --dark-color: #171820;
+  --accent-color: #ff004c;
+}
+
+.btn {
+  background-color: var(--accent-color);
+}
+
+html,
+body {
+  font-family: -apple-system, BlinkMacSystemFont, Arial, Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+}
+
+.nav {
+  position: absolute;
+}
+
+.intro {
+  width: 100vw;
+  min-height: 100vh;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  background: url('../images/bg.gif') center / cover no-repeat;
+  padding-bottom: 20vh;
+}
+
+.intro input {
+  color: inherit;
+}
+
+.intro__title {
+  font-size: 50px;
+}
+
+.intro__subtitle {
+  font-size: 32px;
+}
+
+.organizer {
+  padding: 70px 0;
+}
+
+.organizer__caption {
+  font-size: 12px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}

@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+  <%- include('partials/head', { title }) %>
+  <body>
+    <div class="intro center">
+      <div class="container">
+        <h2>Авторизация</h2>
+        <form data-form="login">
+          <div class="input-field">
+            <input id="email" type="email" name="email" class="validate" required>
+            <label for="email">Электронная почта</label>
+          </div>
+          <div class="input-field">
+            <input id="password" type="password" name="password" class="validate" required>
+            <label for="password">Пароль</label>
+          </div>
+          <button class="waves-effect waves-light btn">Авторизоваться</button>
+        </form>
+      </div>
+    </div>
+  </body>
+</html>

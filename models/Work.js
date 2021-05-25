@@ -10,6 +10,9 @@ const schema = new Schema({
   expert: { type: ObjectId, ref: 'User' },
   isVerified: { type: Boolean, default: false },
   isAdmitted: { type: Boolean, default: false },
+  checkDate: { type: Date }
+}, {
+  timestamps: true
 })
 
 export default model('Work', schema)

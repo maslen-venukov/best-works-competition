@@ -18,22 +18,25 @@ router.get('/', async (req, res) => {
 router.get('/profile', auth, async (req, res) => {
   const { _id } = req.user
   const user = await User.findById(_id)
-  const works = await Work.find({ author: _id })
+  const users = await User.find({ role: { $ne: 'ADMIN' } }).sort({ _id: -1 })
+  const works = await Work.find({ author: _id }).sort({ _id: -1 })
   const nominations = await Nomination.find()
-  return res.render('profile', { title: 'Профиль', user, works, nominations })
+  return res.render('profile', { title: 'Профиль', user, users, works, nominations })
 })
 
 router.get('/settings', auth, async (req, res) => {
   const { _id } = req.user
   const user = await User.findById(_id)
-  return res.render('settings', { title: 'Настройки', user })
+  const nominations = await Nomination.find()
+  return res.render('settings', { title: 'Настройки', user, nominations })
 })
 
 router.get('/send-work', auth, async (req, res) => {
-  const { role } = req.user
-  const nominatios = await Nomination.find()
-  return role === 'USER'
-    ? res.render('send-work', { title: 'Отправить работу', nominatios })
+  const { _id } = req.user
+  const user = await User.findById(_id)
+  const nominations = await Nomination.find()
+  return user.role === 'USER'
+    ? res.render('send-work', { title: 'Отправить работу', user, nominations })
     : res.redirect('/')
 })
 

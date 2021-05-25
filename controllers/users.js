@@ -120,16 +120,12 @@ class Controller {
     }
   }
 
-  async update(req, res) {
+  async updateMyself(req, res) {
     try {
-      const { _id: currentId, role: currentRole } = req.user
-      const { _id, surname, name, patronymic, email, organization, position, nomination, academic_rank, academic_degree, role } = req.body
+      const { _id } = req.user
+      const { surname, name, patronymic, email, organization, position, nomination, academic_rank, academic_degree } = req.body
 
-      let user = null
-
-      user = currentRole === 'ADMIN'
-        ? await User.findById(_id)
-        : await User.findById(currentId)
+      const user = await User.findById(_id)
 
       user.surname = surname || user.surname
       user.name = name || user.name
@@ -138,27 +134,67 @@ class Controller {
       user.organization = organization || user.organization
       user.position = position || user.position
 
-      switch(currentRole) {
-        case 'EXPERT': {
-          user.nomination = nomination || user.nomination
-          user.academic_rank = academic_rank || user.academic_rank
-          user.academic_degree = academic_degree || user.academic_degree
-          break;
-        }
-
-        case 'ADMIN': {
-          user.nomination = nomination || user.nomination
-          user.academic_rank = academic_rank || user.academic_rank
-          user.academic_degree = academic_degree || user.academic_degree
-          user.role = role || user.role
-        }
-
-        default:
-          break;
+      if(user.role === 'EXPERT') {
+        user.nomination = nomination || user.nomination
+        user.academic_rank = academic_rank || user.academic_rank
+        user.academic_degree = academic_degree || user.academic_degree
       }
 
       await user.save()
       return res.json({ message: 'Изменения сохранены' })
+    } catch (e) {
+      console.log(e)
+      return errorHandler(res)
+    }
+  }
+
+  async updateById(req, res) {
+    try {
+      const { _id: currentUserId } = req.user
+      const { id } = req.params
+      const { surname, name, patronymic, email, organization, position, nomination, academic_rank, academic_degree, role } = req.body
+
+      const currentUser = await User.findById(currentUserId)
+
+      if(currentUser.role !== 'ADMIN') {
+        return errorHandler(res, 404, 'Недостаточно прав')
+      }
+
+      const user = await User.findById(id)
+
+      user.surname = surname || user.surname
+      user.name = name || user.name
+      user.patronymic = patronymic || user.patronymic
+      user.email = email || user.email
+      user.organization = organization || user.organization
+      user.position = position || user.position
+      user.nomination = nomination || user.nomination
+      user.academic_rank = academic_rank || user.academic_rank
+      user.academic_degree = academic_degree || user.academic_degree
+      user.role = role || user.role
+
+      await user.save()
+      return res.json({ message: 'Изменения сохранены' })
+    } catch (e) {
+      console.log(e)
+      return errorHandler(res)
+    }
+  }
+
+  async remove(req, res) {
+    try {
+      const { _id: currentUserId } = req.user
+      const { id } = req.params
+
+      const currentUser = await User.findById(currentUserId)
+
+      if(currentUser.role !== 'ADMIN') {
+        return errorHandler(res, 404, 'Недостаточно прав')
+      }
+
+      await User.deleteOne({ _id: id })
+
+      return res.json({ message: 'Пользователь удален' })
     } catch (e) {
       console.log(e)
       return errorHandler(res)

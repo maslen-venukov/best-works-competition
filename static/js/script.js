@@ -3,9 +3,12 @@ const loginForm = document.querySelector('[data-form="login"]')
 const settingsForm = document.querySelector('[data-form="settings"]')
 const sendWorkForm = document.querySelector('[data-form="send-work"]')
 const logoutElem = document.querySelector('.logout')
-const worksRemoveElem = document.querySelectorAll('.works__remove')
+const removeItemElems = document.querySelectorAll('[data-action="remove-item"]')
+const editModalTriggers = document.querySelectorAll('[data-target="edit-modal"]')
+const settingsNominationElem = document.querySelector('[data-settings-nomination]')
+const editModal = document.querySelector('#edit-modal')
 
-const toastTime = 4000
+const toastTime = 3000
 
 const toast = message => M.toast({ html: message })
 
@@ -20,11 +23,18 @@ const getFormData = e => {
   return data
 }
 
-const sidenavs = document.querySelectorAll('.sidenav')
-const sidenavsInstances = M.Sidenav.init(sidenavs)
+const initMaterialize = () => {
+  const sidenavs = document.querySelectorAll('.sidenav')
+  const sidenavsInstances = M.Sidenav.init(sidenavs)
 
-const selects = document.querySelectorAll('select')
-const selectsInstances = M.FormSelect.init(selects)
+  const selects = document.querySelectorAll('select')
+  const selectsInstances = M.FormSelect.init(selects)
+
+  const modals = document.querySelectorAll('.modal')
+  const modalsInstances = M.Modal.init(modals)
+}
+
+initMaterialize()
 
 if(registerForm) {
   registerForm.addEventListener('submit', async e => {
@@ -33,7 +43,7 @@ if(registerForm) {
       const res = await axios.post('/api/users/register', data)
       toast(res.data.message)
       setTimeout(() => {
-        window.location.replace('/me')
+        window.location.replace('/profile')
       }, toastTime)
     } catch (e) {
        toast(e.response.data.message)
@@ -46,7 +56,7 @@ if(loginForm) {
     const data = getFormData(e)
     try {
       await axios.post('/api/users/login', data)
-      window.location.replace('/me')
+      window.location.replace('/profile')
     } catch (e) {
        toast(e.response.data.message)
     }
@@ -56,6 +66,11 @@ if(loginForm) {
 if(settingsForm) {
   settingsForm.addEventListener('submit', async e => {
     const data = getFormData(e)
+    const select = Array.from(e.target.elements).find(el => el.nodeName === 'SELECT')
+    if(select) {
+      data.nomination = select.value
+    }
+    console.log(data)
     try {
       const res = await axios.put('/api/users', data)
       toast(res.data.message)
@@ -96,17 +111,19 @@ if(logoutElem) {
   })
 }
 
-if(worksRemoveElem) {
-  worksRemoveElem.forEach(el => {
+if(removeItemElems) {
+  removeItemElems.forEach(el => {
     el.addEventListener('click', async e => {
       e.preventDefault()
-      if(!window.confirm('Вы действительно хотите удалить работу?')) {
+      const { target } = e
+      if(!window.confirm('Вы действительно хотите выполнить удаление?')) {
         return null
       }
-      const parent = e.target.closest('[data-id]')
+      const parent = target.closest('[data-id]')
+      const collection = target.closest('ul.collection').classList[0]
       const { id } = parent.dataset
       try {
-        const res = await axios.delete(`/api/works/${id}`)
+        const res = await axios.delete(`/api/${collection}/${id}`)
         toast(res.data.message)
         parent.remove()
       } catch (e) {
@@ -114,4 +131,57 @@ if(worksRemoveElem) {
       }
     })
   })
+}
+
+if(editModal) {
+  editModal.addEventListener('submit', async e => {
+    e.preventDefault()
+    const elements = Array.from(e.target.elements)
+    const { id } = editModal.dataset
+    const role = elements[1].value
+    try {
+      const res = await axios.put(`/api/users/${id}`, { role })
+      toast(res.data.message)
+    } catch (e) {
+      toast(e.response.data.message)
+    }
+  })
+}
+
+if(editModalTriggers) {
+  editModalTriggers.forEach(el => {
+    el.addEventListener('click', e => {
+      e.preventDefault()
+      const parent = e.target.closest('[data-id]')
+      const { id, role } = parent.dataset
+      editModal.dataset.id = id
+
+      const item = document.querySelector(`[data-id="${id}"]`)
+      const dropdown = editModal.querySelector('.select-dropdown ')
+      const fullname = item.querySelector('[data-fullname]').textContent
+
+      editModal.querySelector('h5').textContent = fullname
+      editModal.querySelector('select').value = role
+
+      switch(role) {
+        case 'USER':
+          dropdown.value = 'Участник'
+          break
+
+        case 'EXPERT':
+          dropdown.value = 'Эксперт'
+          break
+
+        default:
+          break
+      }
+    })
+  })
+}
+
+if(settingsNominationElem) {
+  const id = settingsNominationElem.dataset.settingsNomination
+  const options = Array.from(settingsNominationElem.querySelectorAll('option'))
+  const nomination = options.find(option => option.value === id).textContent
+  settingsNominationElem.querySelector('input').value = nomination
 }

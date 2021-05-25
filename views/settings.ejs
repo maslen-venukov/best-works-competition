@@ -3,11 +3,10 @@
   <%- include('partials/head', { title }) %>
   <body>
     <div class="settings profile row">
-      <%- include('partials/sidebar') %>
+      <%- include('partials/sidebar', { user }) %>
       <div class="col s10">
         <div class="container">
           <h4 class="title">Настройки</h4>
-          <% if(user.role === 'USER') { %>
             <form data-form="settings">
               <div class="row">
                 <div class="input-field col s4">
@@ -29,24 +28,53 @@
                   <label for="email">Email</label>
                 </div>
               </div>
-              <div class="row">
-                <div class="input-field col s12">
-                  <input id="organization" type="text" name="organization" value="<%= user.organization %>" required class="validate">
-                  <label for="organization">Организация</label>
+
+              <% if(user.role === 'USER' || user.role === 'EXPERT') { %>
+                <div class="row">
+                  <div class="input-field col s12">
+                    <input id="organization" type="text" name="organization" value="<%= user.organization %>" required class="validate">
+                    <label for="organization">Организация</label>
+                  </div>
                 </div>
-              </div>
-              <div class="row">
-                <div class="input-field col s12">
-                  <input id="position" type="text" name="position" value="<%= user.position %>" required class="validate">
-                  <label for="position">Должность</label>
+                <div class="row">
+                  <div class="input-field col s12">
+                    <input id="position" type="text" name="position" value="<%= user.position %>" required class="validate">
+                    <label for="position">Должность</label>
+                  </div>
                 </div>
-              </div>
+              <% } %>
+
+              <% if(user.role === 'EXPERT') { %>
+                <div class="row">
+                  <div class="input-field col s12">
+                    <input id="academic_rank" type="text" name="academic_rank" value="<%= user.academic_rank %>" required class="validate">
+                    <label for="academic_rank">Ученое звание</label>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="input-field col s12">
+                    <input id="academic_degree" type="text" name="academic_degree" value="<%= user.academic_degree %>" required class="validate">
+                    <label for="academic_degree">Ученая степень</label>
+                  </div>
+                </div>
+                <div data-settings-nomination="<%= user.nomination %>" class="row">
+                  <div class="input-field col s12">
+                    <select>
+                      <option value="" disabled selected>Выберите номинацию</option>
+                      <% nominations.forEach(nomination => { %>
+                        <option value="<%= nomination._id %>"><%= nomination.name %></option>
+                      <% }) %>
+                    </select>
+                    <label>Номинация</label>
+                  </div>
+                </div>
+              <% } %>
+
               <button class="btn waves-effect waves-light" type="submit">
                 Сохранить
                 <i class="material-icons right">send</i>
               </button>
             </form>
-          <% } %>
         </div>
       </div>
     </div>

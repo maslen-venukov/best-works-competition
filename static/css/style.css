@@ -76,7 +76,6 @@ body {
   background-color: var(--accent-color);
 }
 
-
 .sidebar nav li {
   width: 100%;
 }
@@ -97,4 +96,18 @@ body {
 
 .collection-actions li:not(:last-child) {
   margin-bottom: 5px;
+}
+
+.admit__title,
+.admit__info,
+.admit__file {
+  margin-bottom: 20px;
+}
+
+.admit__submit {
+  margin-top: 20px;
+}
+
+.bg-dark {
+  background-color: var(--dark-color);
 }

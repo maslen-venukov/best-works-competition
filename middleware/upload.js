@@ -6,9 +6,14 @@ const storage = diskStorage({
     cb(null, 'uploads')
   },
   filename: (req, file, cb) => {
-    const arr = file.originalname.split('.')
-    const ext = arr.pop()
-    cb(null, `${arr.join('.')}-${v4()}.${ext}`)
+    const { surname, name, patronymic } = req.user
+
+    const fullname = `${surname}-${name[0]}-${patronymic[0]}`
+    const extension = file.originalname.split('.').pop()
+
+    const workName = `${fullname}-${req.body.name}-${v4()}.${extension}`.replace(/ /g, '-')
+
+    cb(null, workName)
   }
 })
 

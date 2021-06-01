@@ -2,6 +2,7 @@ const registerForm = document.querySelector('[data-form="register"]')
 const loginForm = document.querySelector('[data-form="login"]')
 const settingsForm = document.querySelector('[data-form="settings"]')
 const sendWorkForm = document.querySelector('[data-form="send-work"]')
+const admitWorkForm = document.querySelector('[data-form="admit-work"]')
 const logoutElem = document.querySelector('.logout')
 const removeItemElems = document.querySelectorAll('[data-action="remove-item"]')
 const editModalTriggers = document.querySelectorAll('[data-target="edit-modal"]')
@@ -10,7 +11,7 @@ const editModal = document.querySelector('#edit-modal')
 
 const toastTime = 3000
 
-const toast = message => M.toast({ html: message })
+const toast = (message, displayLength = toastTime) => M.toast({ html: message, displayLength })
 
 const getFormData = e => {
   e.preventDefault()
@@ -25,13 +26,13 @@ const getFormData = e => {
 
 const initMaterialize = () => {
   const sidenavs = document.querySelectorAll('.sidenav')
-  const sidenavsInstances = M.Sidenav.init(sidenavs)
+  M.Sidenav.init(sidenavs)
 
   const selects = document.querySelectorAll('select')
-  const selectsInstances = M.FormSelect.init(selects)
+  M.FormSelect.init(selects)
 
   const modals = document.querySelectorAll('.modal')
-  const modalsInstances = M.Modal.init(modals)
+  M.Modal.init(modals)
 }
 
 initMaterialize()
@@ -70,7 +71,6 @@ if(settingsForm) {
     if(select) {
       data.nomination = select.value
     }
-    console.log(data)
     try {
       const res = await axios.put('/api/users', data)
       toast(res.data.message)
@@ -99,6 +99,28 @@ if(sendWorkForm) {
   })
 }
 
+if(admitWorkForm) {
+  admitWorkForm.addEventListener('submit', async e => {
+    e.preventDefault()
+    if(!window.confirm('Вы действительно хотите выполнить проверку?')) {
+      return null
+    }
+    const id = window.location.pathname.split('/').pop()
+    const checkboxes = Array.from(e.target.querySelectorAll('input[type="checkbox"]'))
+    const data = checkboxes.reduce((acc, checkbox) => {
+      const { name, checked } = checkbox
+      return { ...acc, [name]: checked }
+    }, {})
+    try {
+      const res = await axios.post(`/api/technical-expertise/${id}`, data)
+      const time = res.status === 201 ? toastTime : 8000
+      toast(res.data.message, time)
+    } catch (e) {
+      toast(e.response.data.message)
+    }
+  })
+}
+
 if(logoutElem) {
   logoutElem.addEventListener('click', async e => {
     e.preventDefault()
@@ -116,7 +138,7 @@ if(removeItemElems) {
     el.addEventListener('click', async e => {
       e.preventDefault()
       const { target } = e
-      if(!window.confirm('Вы действительно хотите выполнить удаление?')) {
+      if(!window.confirm('Вы действительно хотите удалить работу?')) {
         return null
       }
       const parent = target.closest('[data-id]')

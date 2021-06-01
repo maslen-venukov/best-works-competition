@@ -3,7 +3,11 @@
     <nav class="transparent z-depth-0">
       <ul>
         <li><a href="/">Главная</a></li>
-        <li><a href="/profile">Профиль</a></li>
+        <% if(user.role !== 'EXPERT') { %>
+          <li><a href="/profile">Профиль</a></li>
+        <% } else { %>
+          <li><a href="/admit">Допуск работ</a></li>
+        <% } %>
         <li><a href="/settings">Настройки</a></li>
         <% if(user.role === 'USER') { %>
           <li><a href="/send-work">Отправить работу</a></li>

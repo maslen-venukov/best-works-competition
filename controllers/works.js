@@ -11,27 +11,6 @@ const __filename = fileURLToPath(import.meta.url)
 const __dirname = dirname(__filename)
 
 class Controller {
-  async getByNomination(req, res) {
-    try {
-      const { role, nomination: userNomination } = req.user
-      const { nomination } = req.params
-
-      if(role !== 'EXPERT') {
-        return errorHandler(res, 400, 'Доступ только для экспертов')
-      }
-
-      if(userNomination !== nomination) {
-        return errorHandler(res, 400, 'Доступ только по своей номинации')
-      }
-
-      const works = await Work.find({ nomination })
-      return res.json(works)
-    } catch (e) {
-      console.log(e)
-      return errorHandler(res)
-    }
-  }
-
   async create(req, res) {
     try {
       const { name, nomination } = req.body
@@ -56,7 +35,7 @@ class Controller {
       })
 
       await work.save()
-      return res.status(201).json({  message: 'Работа успешно отправлена' })
+      return res.status(201).json({ message: 'Работа успешно отправлена' })
     } catch (e) {
       console.log(e)
       return errorHandler(res)

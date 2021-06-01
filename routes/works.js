@@ -7,9 +7,7 @@ import upload from '../middleware/upload.js'
 
 const router = Router()
 
-router.get('/:nomination', auth, controller.getByNomination)
-router.post('/', upload.single('file'), auth, controller.create)
-// router.put('/:id', auth, controller.update)
+router.post('/', auth, upload.single('file'), controller.create)
 router.delete('/:id', auth, controller.remove)
 
 export default router

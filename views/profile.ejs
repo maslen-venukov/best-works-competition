@@ -22,7 +22,12 @@
                   <p><b>Допущена:</b> <% if(work.isAdmitted) { %> да <% } else { %> нет <% } %></p>
                   <p><b>Дата отправки:</b> <%= new Date(work.createdAt).toLocaleString() %></p>
                   <% if(work.checkDate) { %> <p><b>Дата проверки:</b> <%= new Date(work.checkDate).toLocaleString() %></p> <% } %>
-                  <p><a class="blue-text text-darken-2" href="/uploads/<%= work.file %>" target="_blank">Прикрепленный файл</a></p>
+                  <p>
+                    <a class="blue-text text-darken-2 valign-wrapper"" href="/uploads/<%= work.file %>" target="_blank">
+                      <i class="material-icons">insert_drive_file</i>
+                      Прикрепленный файл
+                    </a>
+                  </p>
                 </li>
               <% })} else { %>
                 <li class="collection-item">Список работ пуст</li>

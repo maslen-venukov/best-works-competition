@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="ru">
+  <%- include('partials/head', { title }) %>
+  <body>
+    <div class="profile admit row">
+      <%- include('partials/sidebar', { user }) %>
+      <div class="col s10">
+        <div class="container">
+          <h5 class="admit__title">Наличие документов к работе (отметить галочкой)</h5>
+
+          <div class="admit__info">
+            <p>* заполняется при наличии соавтора</p>
+            <p>** необязательное</p>
+          </div>
+
+          <div class="admit__file">
+            <a class="blue-text text-darken-2 valign-wrapper"" href="/uploads/<%= work.file %>" target="_blank">
+              <i class="material-icons">insert_drive_file</i>
+              Прикрепленный файл
+            </a>
+          </div>
+
+          <form data-form="admit-work">
+            <p>
+              <label>
+                <input name="request" type="checkbox" class="filled-in" />
+                <span>Заявка</span>
+              </label>
+            </p>
+            <p>
+              <label>
+                <input name="consentProcessPersonalData" type="checkbox" class="filled-in" />
+                <span>Согласие на обработку персональных данных</span>
+              </label>
+            </p>
+            <p>
+              <label>
+                <input name="advancingLetter" type="checkbox" class="filled-in" />
+                <span>Письмо-выдвижение</span>
+              </label>
+            </p>
+            <p>
+              <label>
+                <input name="expertiseAct" type="checkbox" class="filled-in" />
+                <span>Акт экспертизы</span>
+              </label>
+            </p>
+            <p>
+              <label>
+                <input name="coAuthors" type="checkbox" class="filled-in" />
+                <span>Наличие соавторов*</span>
+              </label>
+            </p>
+            <p>
+              <label>
+                <input name="creativeContributionReference" type="checkbox" class="filled-in" />
+                <span>Справка о творческом вкладе*</span>
+              </label>
+            </p>
+            <p>
+              <label>
+                <input name="aboutAuthor" type="checkbox" class="filled-in" />
+                <span>Сведения об авторе</span>
+              </label>
+            </p>
+            <p>
+              <label>
+                <input name="competitionWork" type="checkbox" class="filled-in" />
+                <span>Конкурская работа</span>
+              </label>
+            </p>
+            <p>
+              <label>
+                <input name="pressRelease" type="checkbox" class="filled-in" />
+                <span>Пресс-релиз</span>
+              </label>
+            </p>
+            <p>
+              <label>
+                <input name="annotation" type="checkbox" class="filled-in" />
+                <span>Анотация</span>
+              </label>
+            </p>
+            <p>
+              <label>
+                <input name="additionalMaterials" type="checkbox" class="filled-in" />
+                <span>Дополнительные материалы (если имеются)**</span>
+              </label>
+            </p>
+            <p>
+              <label>
+                <input name="reviews" type="checkbox" class="filled-in" />
+                <span>Отзывы</span>
+              </label>
+            </p>
+            <p>
+              <label>
+                <input name="introductionAct" type="checkbox" class="filled-in" />
+                <span>Акт внедрения (если имеется)**</span>
+              </label>
+            </p>
+            <p>
+              <label>
+                <input name="electronicVariant" type="checkbox" class="filled-in" />
+                <span>Электронный вариант</span>
+              </label>
+            </p>
+            <p>
+              <label>
+                <input name="notPrizeWinner" type="checkbox" class="filled-in" />
+                <span>Авторам работ не присваивалось звание "Лауреат премии Оренбургской области в сфере науки и техники" за предыдущие 3 года</span>
+              </label>
+            </p>
+            <button class="admit__submit modal-trigger btn waves-effect waves-light">
+              Отправить
+              <i class="material-icons right">send</i>
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

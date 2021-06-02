@@ -15,6 +15,9 @@
                 <% if(expertise) { %>
                   <p><b>Проверена:</b> да</p>
                   <p><b>Допущена:</b> <% if(expertise.isAdmitted) { %> да <% } else { %> нет <% } %></p>
+                  <% if(!expertise.isAdmitted && expertise.rejectionReason) { %>
+                    <p><b>Причина не соответствия:</b> <%= expertise.rejectionReason %></p>
+                  <% } %>
                   <p><b>Дата проверки:</b> <%= new Date(expertise.createdAt).toLocaleString() %></p>
                 <% } else { %>
                   <p><b>Проверена:</b> нет</p>

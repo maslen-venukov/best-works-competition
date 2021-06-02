@@ -22,10 +22,13 @@ router.get('/profile', auth, async (req, res) => {
 
   let users = null
   let works = null
+  let technicalExpertise = null
 
   switch(role) {
     case 'USER': {
       works = await Work.find({ author: _id }).sort({ _id: -1 })
+      const worksIds = works.map(work => work._id)
+      technicalExpertise = await TechnicalExpertise.find({ work: worksIds }).sort({ _id: -1 })
       break
     }
 
@@ -39,7 +42,7 @@ router.get('/profile', auth, async (req, res) => {
   }
 
   const nominations = await Nomination.find()
-  return res.render('profile', { title: 'Профиль', user, users, works, nominations })
+  return res.render('profile', { title: 'Профиль', user, users, works, nominations, technicalExpertise })
 })
 
 router.get('/admit/:id', auth, async (req, res) => {
@@ -69,7 +72,8 @@ router.get('/admit', auth, async (req, res) => {
 
   const { nomination } = user
   const works = await Work.find({ nomination }).sort({ _id: -1 })
-  const technicalExpertise = await TechnicalExpertise.find({ work: [...works.filter(work => work.nomination.toString() === nomination.toString())] }).sort({ _id: -1 })
+  const worksIds = works.map(work => work._id)
+  const technicalExpertise = await TechnicalExpertise.find({ work: worksIds }).sort({ _id: -1 })
   return res.render('admit', { title: 'Допуск работ к конкурсу', user, works, technicalExpertise })
 })
 

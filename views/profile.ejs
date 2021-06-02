@@ -18,10 +18,18 @@
                   </ul>
                   <p><b>Название:</b> <%= work.name %></p>
                   <p><b>Номинация:</b> <%= nominations.find(nomination => nomination._id.toString() === work.nomination.toString()).name %></p>
-                  <p><b>Проверена:</b> <% if(work.isVerified) { %> да <% } else { %> нет <% } %></p>
-                  <p><b>Допущена:</b> <% if(work.isAdmitted) { %> да <% } else { %> нет <% } %></p>
+                  <% const expertise = technicalExpertise.find(expertise => expertise.work.toString() === work._id.toString()) %>
+                  <% if(expertise) { %>
+                    <p><b>Проверена:</b> да</p>
+                    <p><b>Допущена:</b> <% if(expertise.isAdmitted) { %> да <% } else { %> нет <% } %></p>
+                    <% if(!expertise.isAdmitted && expertise.rejectionReason) { %>
+                      <p><b>Причина не соответствия:</b> <%= expertise.rejectionReason %></p>
+                    <% } %>
+                    <p><b>Дата проверки:</b> <%= new Date(expertise.createdAt).toLocaleString() %></p>
+                  <% } else { %>
+                    <p><b>Проверена:</b> нет</p>
+                  <% } %>
                   <p><b>Дата отправки:</b> <%= new Date(work.createdAt).toLocaleString() %></p>
-                  <% if(work.checkDate) { %> <p><b>Дата проверки:</b> <%= new Date(work.checkDate).toLocaleString() %></p> <% } %>
                   <p>
                     <a class="blue-text text-darken-2 valign-wrapper"" href="/uploads/<%= work.file %>" target="_blank">
                       <i class="material-icons">insert_drive_file</i>

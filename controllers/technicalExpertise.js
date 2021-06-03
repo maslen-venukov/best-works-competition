@@ -34,13 +34,17 @@ class Controller {
         notPrizeWinner
       } = req.body
 
+      const obj = {
+        work: workId,
+        expert: user._id,
+        ...req.body
+      }
+
       if(!request || !consentProcessPersonalData || !advancingLetter || !expertiseAct || !aboutAuthor || !competitionWork || !pressRelease || !annotation || !reviews || !electronicVariant) {
         const technicalExpertise = new TechnicalExpertise({
-          work: id,
-          expert: user._id,
+          ...obj,
           isAdmitted: false,
-          rejectionReason: 'Не соответствует приказу министерства образования Оренбургской области «Об утверждении требований к выдвигаемым работам на соискание премий Губернатора Оренбургской области в сфере науки и техники»',
-          ...req.body
+          rejectionReason: 'Не соответствует приказу министерства образования Оренбургской области «Об утверждении требований к выдвигаемым работам на соискание премий Губернатора Оренбургской области в сфере науки и техники»'
         })
         await technicalExpertise.save()
         return res.json({ message: `Работа не допущена к конкурсу. ${technicalExpertise.rejectionReason}.` })
@@ -48,21 +52,17 @@ class Controller {
 
       if(!notPrizeWinner) {
         const technicalExpertise = new TechnicalExpertise({
-          work: id,
-          expert: user._id,
+          ...obj,
           isAdmitted: false,
-          rejectionReason: 'Не соответствует п. 20 приложения указа Губернатора Оренбургской области от 12.11.12 № 781-ук «Об учреждении премий Губернатора Оренбургской области в сфере науки и техники»',
-          ...req.body
+          rejectionReason: 'Не соответствует п. 20 приложения указа Губернатора Оренбургской области от 12.11.12 № 781-ук «Об учреждении премий Губернатора Оренбургской области в сфере науки и техники»'
         })
         await technicalExpertise.save()
         return res.json({ message: `Работа не допущена к конкурсу. ${technicalExpertise.rejectionReason}.` })
       }
 
       const technicalExpertise = new TechnicalExpertise({
-        work: id,
-        expert: user._id,
+        ...obj,
         isAdmitted: true,
-        ...req.body
       })
       await technicalExpertise.save()
       return res.status(201).json({ message: 'Работа допущена к конкурсу' })

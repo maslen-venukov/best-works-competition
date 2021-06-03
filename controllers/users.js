@@ -100,26 +100,6 @@ class Controller {
     }
   }
 
-  async auth(req, res) {
-    try {
-      const { _id, email } = req.user
-      const user = await User.findById(id)
-      const { role } = user
-
-      const token = `Bearer ${jwt.sign({ _id, surname, name, patronymic, email, role }, process.env.SECRET_KEY, { expiresIn: '24h' })}`
-
-      return res
-        .cookie('token', token, {
-          httpOnly: true,
-          maxAge
-        })
-        .json({ token })
-    } catch (e) {
-      console.log(e)
-      return errorHandler(res)
-    }
-  }
-
   async updateMyself(req, res) {
     try {
       const { _id } = req.user

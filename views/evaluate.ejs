@@ -10,8 +10,13 @@
           <ul class="works collection">
             <% if(works.length) { works.forEach(work => { %>
               <li class="collection-item" data-id="<%= work._id %>">
-                <p><b>Название:</b> <%= work.name %></p>
                 <% const expertise = technicalExpertise.find(expertise => expertise.work.toString() === work._id.toString()) %>
+                <% const review = expertReviews.find(review => review.work === work.id.toString()) %>
+                <p><b>Название:</b> <%= work.name %></p>
+                <% if(review) { %>
+                  <p><b>Количество баллов:</b> <%= review.score %></p>
+                  <p><b>Дата оценки:</b> <%= new Date(review.createdAt).toLocaleString() %></p>
+                <% } %>
                 <p><b>Дата проверки:</b> <%= new Date(expertise.createdAt).toLocaleString() %></p>
                 <p><b>Дата отправки:</b> <%= new Date(work.createdAt).toLocaleString() %></p>
                 <p>
@@ -20,7 +25,9 @@
                     Прикрепленный файл
                   </a>
                 </p>
-                <p><a class="blue-text text-darken-2" href="/evaluate/<%= work.id %>">Оценить</a></p>
+                <% if(!review) { %>
+                  <p><a class="blue-text text-darken-2" href="/evaluate/<%= work.id %>">Оценить</a></p>
+                <% } %>
               </li>
             <% })} else { %>
               <li class="collection-item">Список работ пуст</li>

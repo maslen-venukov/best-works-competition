@@ -11,6 +11,5 @@ router.post('/logout', controller.logout)
 router.put('/:id', auth, controller.updateById)
 router.put('/', auth, controller.updateMyself)
 router.delete('/:id', auth, controller.remove)
-router.post('/auth', auth, controller.auth)
 
 export default router

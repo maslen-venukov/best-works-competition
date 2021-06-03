@@ -118,6 +118,9 @@ if(admitWorkForm) {
       const res = await axios.post(`/api/technical-expertise/${id}`, data)
       const time = res.status === 201 ? toastTime : 8000
       toast(res.data.message, time)
+      setTimeout(() => {
+        window.location.replace('/admit')
+      }, time)
     } catch (e) {
       toast(e.response.data.message)
     }

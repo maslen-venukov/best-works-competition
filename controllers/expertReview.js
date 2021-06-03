@@ -3,6 +3,7 @@ import User from '../models/User.js'
 import ExpertReview from '../models/ExpertReview.js'
 
 import errorHandler from '../utils/errorHandler.js'
+import getScore from '../utils/getScore.js'
 
 class Controller {
   async create(req, res) {
@@ -30,7 +31,7 @@ class Controller {
       })
 
       const data = body.map(el => ({ ...el, work: workId }))
-      const score = data.reduce((acc, el) => acc += el.value, 0)
+      const score = getScore(data)
       await ExpertReview.insertMany(data)
       return res.status(201).json({ message: `Работа оценена на ${score} баллов` })
     } catch (e) {

@@ -7,9 +7,9 @@ import ExpertSheet from '../models/ExpertSheet.js'
 import ExpertReview from '../models/ExpertReview.js'
 
 import checkAuth from '../utils/checkAuth.js'
-import getScore from '../utils/getScore.js'
-
-const sendError = res => res.send('Что-то пошло не так...')
+import groupReviewsByWork from '../utils/groupReviewsByWork.js'
+import getRating from '../utils/getRating.js'
+import sendError from '../utils/sendError.js'
 
 class Controller {
   index(req, res) {
@@ -166,22 +166,38 @@ class Controller {
 
       const expertReviews = await ExpertReview.find({ work: worksIds })
 
-      const groupedReviewsByWork = expertReviews.reduce((acc, el) => {
-        const field = el.work
-        acc[field] = [...(acc[field] || []), el]
-        return acc
-      }, {})
-
-      const scores = Object.keys(groupedReviewsByWork).map(group => ({
-        work: group,
-        score: getScore(groupedReviewsByWork[group]),
-        createdAt: groupedReviewsByWork[group][0].createdAt
-      }))
+      const scores = groupReviewsByWork(expertReviews)
 
       return res.render(
         'evaluate',
         { title: 'Оценка работ', user, works: admittedWorks, technicalExpertise, expertReviews: scores }
       )
+    } catch (e) {
+      console.log(e)
+      return sendError(res)
+    }
+  }
+
+  async rating(req, res) {
+    try {
+      const { _id } = req.user
+      const user = await User.findById(_id)
+
+      if(user.role !== 'ADMIN') {
+        return res.redirect('/')
+      }
+
+      const works = await Work.find()
+      const nominations = await Nomination.find()
+      const users = await User.find()
+      const expertReviews = await ExpertReview.find().sort({ _id: -1 })
+      const technicalExpertise = await TechnicalExpertise.find().sort({ _id: -1 })
+
+      const scores = groupReviewsByWork(expertReviews)
+
+      const rating = getRating(scores, works, nominations, users, technicalExpertise)
+
+      return res.render('rating', { title: 'Рейтинг', user, rating })
     } catch (e) {
       console.log(e)
       return sendError(res)

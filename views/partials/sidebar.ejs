@@ -9,10 +9,13 @@
           <li><a href="/admit">Допуск работ</a></li>
           <li><a href="/evaluate">Оценка работ</a></li>
         <% } %>
-        <li><a href="/settings">Настройки</a></li>
         <% if(user.role === 'USER') { %>
           <li><a href="/send-work">Отправить работу</a></li>
         <% } %>
+        <% if(user.role === 'ADMIN') { %>
+          <li><a href="/rating">Рейтинг</a></li>
+        <% } %>
+        <li><a href="/settings">Настройки</a></li>
       </ul>
     </nav>
   </div>

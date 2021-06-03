@@ -114,3 +114,8 @@ body {
 .bg-dark {
   background-color: var(--dark-color);
 }
+
+.rating__table th,
+.rating__table td {
+  text-align: center;
+}

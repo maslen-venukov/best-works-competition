@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="ru">
+  <%- include('partials/head', { title }) %>
+  <body>
+    <div class="profile rating row">
+      <%- include('partials/sidebar', { user }) %>
+      <div class="col s10">
+        <div class="container">
+          <h4 class="title">Рейтинг</h4>
+          <table class="rating__table">
+            <thead>
+              <tr>
+                  <th>ФИО участника</th>
+                  <th>Организация</th>
+                  <th>Наименования работы</th>
+                  <th>Номинация</th>
+                  <th>ФИО эксперта</th>
+                  <th>ученая степень/ученое звание</th>
+                  <th>Место работы</th>
+                  <th>Количество баллов</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% rating.forEach(work => { %>
+                <tr>
+                  <td><%= work.author.fullname %></td>
+                  <td><%= work.author.organization %></td>
+                  <td><%= work.name %></td>
+                  <td><%= work.nomination %></td>
+                  <td><%= work.expert.fullname %></td>
+                  <td><%= work.expert.academic_degree %>/<%= work.expert.academic_rank %></td>
+                  <td><%= work.expert.organization %></td>
+                  <td><%= work.score %></td>
+                </tr>
+              <% }) %>
+          </table>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

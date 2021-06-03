@@ -16,11 +16,4 @@ const schema = new Schema({
   academic_degree: { type: String }
 })
 
-schema.set('toJSON', {
-  transform: (_, obj) => {
-    delete obj.password
-    return ret
-  }
-})
-
 export default model('User', schema)

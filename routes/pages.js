@@ -4,6 +4,8 @@ import User from '../models/User.js'
 import Work from '../models/Work.js'
 import Nomination from '../models/Nomination.js'
 import TechnicalExpertise from '../models/TechnicalExpertise.js'
+import EvaluationCriterion from '../models/EvaluationCriterion.js'
+import ExpertSheet from '../models/ExpertSheet.js'
 
 import auth from '../middleware/auth.js'
 
@@ -17,18 +19,18 @@ router.get('/', async (req, res) => {
 })
 
 router.get('/profile', auth, async (req, res) => {
-  const { _id, role } = req.user
+  const { _id } = req.user
   const user = await User.findById(_id)
 
   let users = null
   let works = null
   let technicalExpertise = null
 
-  switch(role) {
+  switch(user.role) {
     case 'USER': {
       works = await Work.find({ author: _id }).sort({ _id: -1 })
       const worksIds = works.map(work => work._id)
-      technicalExpertise = await TechnicalExpertise.find({ work: worksIds }).sort({ _id: -1 })
+      technicalExpertise = await TechnicalExpertise.find({ work: worksIds })
       break
     }
 
@@ -46,17 +48,19 @@ router.get('/profile', auth, async (req, res) => {
 })
 
 router.get('/admit/:id', auth, async (req, res) => {
-  const { _id } = req.user
-  const user = await User.findById(_id)
+  const { _id: userId } = req.user
+  const { id: workId } = req.params
+
+  const user = await User.findById(userId)
 
   if(user.role !== 'EXPERT') {
     return res.redirect('/')
   }
 
-  const work = await Work.findById(req.params.id)
+  const work = await Work.findById(workId)
 
   if(user.nomination.toString() !== work.nomination.toString()) {
-    return res.redirect('/')
+    return res.redirect('/admit')
   }
 
   return res.render('admitById', { title: 'Допуск работ к конкурсу', user, work })
@@ -66,15 +70,75 @@ router.get('/admit', auth, async (req, res) => {
   const { _id } = req.user
   const user = await User.findById(_id)
 
+  const { role, nomination } = user
+
+  if(role !== 'EXPERT') {
+    return res.redirect('/')
+  }
+
+  const works = await Work.find({ nomination }).sort({ _id: -1 })
+  const worksIds = works.map(work => work._id)
+  const technicalExpertise = await TechnicalExpertise.find({ work: worksIds })
+
+  return res.render('admit', { title: 'Допуск работ к конкурсу', user, works, technicalExpertise })
+})
+
+router.get('/evaluate/:id', auth, async (req, res) => {
+  const { _id: userId } = req.user
+  const { id: workId } = req.params
+
+  const user = await User.findById(userId)
+
   if(user.role !== 'EXPERT') {
     return res.redirect('/')
   }
 
-  const { nomination } = user
+  const work = await Work.findById(workId)
+
+  if(user.nomination.toString() !== work.nomination.toString()) {
+    return res.redirect('/evaluate')
+  }
+
+  const technicalExpertise = await TechnicalExpertise.findOne({ work: workId })
+
+  if(!technicalExpertise.isAdmitted) {
+    return res.redirect('/evaluate')
+  }
+
+  const evaluationCriteries = await EvaluationCriterion.find()
+  const expertSheets = await ExpertSheet.find()
+
+  const expertTable = expertSheets.map(sheet => {
+    const { _id, name } = sheet
+    return {
+      _id,
+      name,
+      criteries: evaluationCriteries.filter(criterion => criterion.expertSheet.toString() === sheet._id.toString())
+    }
+  })
+
+  return res.render('evaluateById', { title: 'Оценка работ', user, work, expertTable })
+})
+
+// TODO спрятать кнопку Оценить у оцененых работ
+// TODO отобразить количество баллов у оцененных работ
+
+router.get('/evaluate', auth, async (req, res) => {
+  const { _id } = req.user
+  const user = await User.findById(_id)
+
+  const { role, nomination } = user
+
+  if(role !== 'EXPERT') {
+    return res.redirect('/')
+  }
+
   const works = await Work.find({ nomination }).sort({ _id: -1 })
   const worksIds = works.map(work => work._id)
-  const technicalExpertise = await TechnicalExpertise.find({ work: worksIds }).sort({ _id: -1 })
-  return res.render('admit', { title: 'Допуск работ к конкурсу', user, works, technicalExpertise })
+  const technicalExpertise = await TechnicalExpertise.find({ work: worksIds, isAdmitted: true }).sort({ _id: -1 })
+  const admittedWorks = technicalExpertise.map(expertise => works.find(work => expertise.work.toString() === work._id.toString()))
+
+  return res.render('evaluate', { title: 'Оценка работ', user, works: admittedWorks, technicalExpertise })
 })
 
 router.get('/settings', auth, async (req, res) => {

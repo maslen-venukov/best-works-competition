@@ -2,19 +2,19 @@
 <html lang="ru">
   <%- include('partials/head', { title }) %>
   <body>
-    <div class="profile admit row">
+    <div class="profile check row">
       <%- include('partials/sidebar', { user }) %>
       <div class="col s10">
         <div class="container">
-          <h5 class="admit__title">Наличие документов к работе (отметить галочкой)</h5>
+          <h5 class="title title--small">Наличие документов к работе (отметить галочкой)</h5>
 
-          <div class="admit__info">
+          <div class="check__info">
             <p>* заполняется при наличии соавтора</p>
             <p>** необязательное</p>
           </div>
 
-          <div class="admit__file">
-            <a class="blue-text text-darken-2 valign-wrapper"" href="/uploads/<%= work.file %>" target="_blank">
+          <div class="check__file">
+            <a class="blue-text text-darken-2 valign-wrapper" href="/uploads/<%= work.file %>" target="_blank">
               <i class="material-icons">insert_drive_file</i>
               Прикрепленный файл
             </a>
@@ -111,7 +111,7 @@
                 <span>Авторам работ не присваивалось звание "Лауреат премии Оренбургской области в сфере науки и техники" за предыдущие 3 года</span>
               </label>
             </p>
-            <button class="admit__submit modal-trigger btn waves-effect waves-light">
+            <button class="check__submit btn waves-effect waves-light">
               Отправить
               <i class="material-icons right">send</i>
             </button>

@@ -21,6 +21,10 @@ body {
   margin-bottom: 40px;
 }
 
+.title--small {
+  margin-bottom: 20px;
+}
+
 .nav.dark {
   background-color: var(--dark-color);
 }
@@ -72,8 +76,11 @@ body {
   overflow-y: auto;
 }
 
-.btn, .btn:hover, .btn:active {
+.btn,
+.btn:hover,
+.btn:active {
   background-color: var(--accent-color);
+  transition: margin 0s;
 }
 
 .sidebar nav li {
@@ -98,14 +105,10 @@ body {
   margin-bottom: 5px;
 }
 
-.admit__title,
-.admit__info,
-.admit__file {
-  margin-bottom: 20px;
-}
-
-.admit__submit {
-  margin-top: 20px;
+.check__info,
+.check__file,
+.check__submit {
+  margin: 20px 0;
 }
 
 .bg-dark {

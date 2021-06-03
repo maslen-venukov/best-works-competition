@@ -4,6 +4,7 @@ const { Schema, model, ObjectId } = mongoose
 
 const schema = new Schema({
   work: { type: ObjectId, ref: 'Work', required: true },
+  expert: { type: ObjectId, ref: 'User', required: true },
   isAdmitted: { type: Boolean, required: true },
   rejectionReason: { type: String },
   request: { type: Boolean, required: true },

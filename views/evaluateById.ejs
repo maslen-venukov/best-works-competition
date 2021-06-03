@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="ru">
+  <%- include('partials/head', { title }) %>
+  <body>
+    <div class="profile check row">
+      <%- include('partials/sidebar', { user }) %>
+      <div class="col s10">
+        <div class="container">
+          <h5 class="title title--small">Экспертная оценка (ввести количество баллов)</h5>
+
+          <div class="check__file">
+            <a class="blue-text text-darken-2 valign-wrapper" href="/uploads/<%= work.file %>" target="_blank">
+              <i class="material-icons">insert_drive_file</i>
+              Прикрепленный файл
+            </a>
+          </div>
+
+          <form data-form="evaluate-work">
+            <% expertTable.forEach((sheet, index) => { %>
+              <h6><b><%= index + 1 %>. <%= sheet.name %></b></h6>
+              <% if(sheet.criteries.length) { %>
+                <ul class="collection">
+                  <% sheet.criteries.forEach(criterion => { %>
+                    <li class="collection-item">
+                      <b><%= criterion.number %></b>
+                      <%= criterion.label %>
+                      <% if(criterion.list.length) { %>
+                        <% criterion.list.forEach((item, index) => { %>
+                          <p><%= item %> <%= criterion.scores.split(',')[index] %></p>
+                        <% }) %>
+                      <% } %>
+                      <% if(!criterion.list.length) { %>
+                        (<%= criterion.scores %>)
+                      <% } %>
+                      <div class="input-field">
+                        <input id="<%= criterion._id %>" type="number" required min="0" class="validate">
+                        <label for="<%= criterion._id %>">Количество баллов</label>
+                      </div>
+                    </li>
+                  <% })} %>
+                </ul>
+            <% }) %>
+            <button class="check__submit btn waves-effect waves-light">
+              Отправить
+              <i class="material-icons right">send</i>
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

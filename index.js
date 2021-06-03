@@ -12,6 +12,7 @@ import pagesRouter from './routes/pages.js'
 import usersRouter from './routes/users.js'
 import worksRouter from './routes/works.js'
 import technicalExpertiseRouter from './routes/technicalExpertise.js'
+import expertReviewRouter from './routes/expertReview.js'
 
 const PORT = process.env.PORT || 3000
 const MONGO_URI = process.env.MONGO_URI
@@ -34,6 +35,7 @@ app.use('/', pagesRouter)
 app.use('/api/users', usersRouter)
 app.use('/api/works', worksRouter)
 app.use('/api/technical-expertise', technicalExpertiseRouter)
+app.use('/api/expert-reviews', expertReviewRouter)
 
 const start = () => {
   try {

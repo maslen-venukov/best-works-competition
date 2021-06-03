@@ -3,6 +3,7 @@ const loginForm = document.querySelector('[data-form="login"]')
 const settingsForm = document.querySelector('[data-form="settings"]')
 const sendWorkForm = document.querySelector('[data-form="send-work"]')
 const admitWorkForm = document.querySelector('[data-form="admit-work"]')
+const evaluateWorkForm = document.querySelector('[data-form="evaluate-work"]')
 const logoutElem = document.querySelector('.logout')
 const removeItemElems = document.querySelectorAll('[data-action="remove-item"]')
 const editModalTriggers = document.querySelectorAll('[data-target="edit-modal"]')
@@ -23,6 +24,8 @@ const getFormData = e => {
   }, {})
   return data
 }
+
+const getIdFromUrl = () => window.location.pathname.split('/').pop()
 
 const initMaterialize = () => {
   const sidenavs = document.querySelectorAll('.sidenav')
@@ -105,7 +108,7 @@ if(admitWorkForm) {
     if(!window.confirm('Вы действительно хотите выполнить проверку?')) {
       return null
     }
-    const id = window.location.pathname.split('/').pop()
+    const id = getIdFromUrl()
     const checkboxes = Array.from(e.target.querySelectorAll('input[type="checkbox"]'))
     const data = checkboxes.reduce((acc, checkbox) => {
       const { name, checked } = checkbox
@@ -115,6 +118,33 @@ if(admitWorkForm) {
       const res = await axios.post(`/api/technical-expertise/${id}`, data)
       const time = res.status === 201 ? toastTime : 8000
       toast(res.data.message, time)
+    } catch (e) {
+      toast(e.response.data.message)
+    }
+  })
+}
+
+if(evaluateWorkForm) {
+  evaluateWorkForm.addEventListener('submit', async e => {
+    e.preventDefault()
+    const elements = Array.from(e.target.elements)
+    const inputs = elements.filter(el => el.nodeName === 'INPUT')
+    const workId = getIdFromUrl()
+    const data = inputs.reduce((acc, input) => {
+      const { id, value } = input
+      const obj = {
+        evaluationCriterion: id,
+        value: Number(value)
+      }
+      return [...acc, obj]
+    }, [])
+    try {
+      const res = await axios.post(`/api/expert-reviews/${workId}`, data)
+      console.log(res)
+      toast(res.data.message)
+      setTimeout(() => {
+        window.location.replace('/evaluate')
+      }, toastTime)
     } catch (e) {
       toast(e.response.data.message)
     }

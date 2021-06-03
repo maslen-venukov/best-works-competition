@@ -9,11 +9,12 @@ const storage = diskStorage({
     const { surname, name, patronymic } = req.user
 
     const fullname = `${surname}-${name[0]}-${patronymic[0]}`
+    const workName = req.body.name.trim()
     const extension = file.originalname.split('.').pop()
 
-    const workName = `${fullname}-${req.body.name}-${v4()}.${extension}`.replace(/ /g, '-')
+    const fileName = `${workName}-${fullname}-${v4()}.${extension}`.replace(/ /g, '-')
 
-    cb(null, workName)
+    cb(null, fileName)
   }
 })
 

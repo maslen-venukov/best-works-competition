@@ -7,7 +7,7 @@ import errorHandler from '../utils/errorHandler.js'
 class Controller {
   async create(req, res) {
     try {
-      const { id } = req.params
+      const { id: workId } = req.params
       const { _id: userId } = req.user
 
       const user = await User.findById(userId)
@@ -15,7 +15,7 @@ class Controller {
         return errorHandler(res, 400, 'Недостаточно прав')
       }
 
-      const work = await Work.findById(id)
+      const work = await Work.findById(workId)
       if(user.nomination.toString() !== work.nomination.toString()) {
         return errorHandler(res, 400, 'Недостаточно прав')
       }
@@ -37,6 +37,7 @@ class Controller {
       if(!request || !consentProcessPersonalData || !advancingLetter || !expertiseAct || !aboutAuthor || !competitionWork || !pressRelease || !annotation || !reviews || !electronicVariant) {
         const technicalExpertise = new TechnicalExpertise({
           work: id,
+          expert: user._id,
           isAdmitted: false,
           rejectionReason: 'Не соответствует приказу министерства образования Оренбургской области «Об утверждении требований к выдвигаемым работам на соискание премий Губернатора Оренбургской области в сфере науки и техники»',
           ...req.body
@@ -48,6 +49,7 @@ class Controller {
       if(!notPrizeWinner) {
         const technicalExpertise = new TechnicalExpertise({
           work: id,
+          expert: user._id,
           isAdmitted: false,
           rejectionReason: 'Не соответствует п. 20 приложения указа Губернатора Оренбургской области от 12.11.12 № 781-ук «Об учреждении премий Губернатора Оренбургской области в сфере науки и техники»',
           ...req.body
@@ -58,6 +60,7 @@ class Controller {
 
       const technicalExpertise = new TechnicalExpertise({
         work: id,
+        expert: user._id,
         isAdmitted: true,
         ...req.body
       })

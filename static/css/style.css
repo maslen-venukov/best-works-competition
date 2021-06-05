@@ -36,7 +36,7 @@ body {
   display: flex;
   align-items: center;
   background: url('../images/bg.gif') center / cover no-repeat;
-  padding-bottom: 20vh;
+  padding-bottom: 25vh;
 }
 
 .intro input {
@@ -118,4 +118,8 @@ body {
 .rating__table th,
 .rating__table td {
   text-align: center;
+}
+
+.expert-profile p:not(:last-child) {
+  margin-bottom: 5px;
 }

@@ -43,6 +43,17 @@
             </ul>
           <% } %>
 
+          <% if(user.role === 'EXPERT') { %>
+            <div class="card expert-profile">
+              <div class="card-content">
+                <p><%= user.surname %> <%= user.name %> <%= user.patronymic %></p>
+                <p><%= user.position %>, <%= user.organization %></p>
+                <p><%= user.academic_rank %>, <%= user.academic_degree %></p>
+                <p><%= nominations.find(nomination => nomination._id.toString() === user.nomination.toString()).name %></p>
+              </div>
+            </div>
+          <% } %>
+
           <% if(user.role === 'ADMIN') { %>
             <ul class="users collection">
               <% if(users.length) { users.forEach(user => { %>

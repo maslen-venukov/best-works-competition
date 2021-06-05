@@ -66,10 +66,14 @@ class Controller {
         return errorHandler(res, 400, 'Заполните все поля')
 
       const user = await User.findOne({ email })
-      const isMatch = bcrypt.compareSync(password, user.password)
-
-      if(!user || !isMatch)
+      if(!user) {
         return errorHandler(res, 400, 'Неверный логин или пароль')
+      }
+
+      const isMatch = bcrypt.compareSync(password, user.password)
+      if(!isMatch) {
+        return errorHandler(res, 400, 'Неверный логин или пароль')
+      }
 
       const { _id, surname, name, patronymic, role } = user
       const token = `Bearer ${jwt.sign({ _id, surname, name, patronymic, email, role }, process.env.SECRET_KEY, { expiresIn: '24h' })}`

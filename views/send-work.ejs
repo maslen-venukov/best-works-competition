@@ -27,7 +27,15 @@
             </div>
             <div class="row">
               <div class="input-field col s12">
-                <input type="file" name="file" accept="application/*" required>
+                <div class="file-field input-field">
+                  <div class="btn">
+                    <span>Файл</span>
+                    <input type="file" name="file" accept="application/*" required>
+                  </div>
+                  <div class="file-path-wrapper">
+                    <input class="file-path validate" type="text">
+                  </div>
+                </div>
               </div>
             </div>
             <button class="btn waves-effect waves-light" type="submit">

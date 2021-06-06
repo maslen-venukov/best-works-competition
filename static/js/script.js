@@ -171,11 +171,27 @@ if(removeItemElems) {
     el.addEventListener('click', async e => {
       e.preventDefault()
       const { target } = e
-      if(!window.confirm('Вы действительно хотите удалить работу?')) {
+
+      const collection = target.closest('ul.collection').classList[0]
+
+      const getName = collection => {
+        switch(collection) {
+          case 'users':
+            return 'пользователя'
+
+          case 'works':
+            return 'работу'
+
+          default:
+            return null
+        }
+      }
+
+      if(!window.confirm(`Вы действительно хотите удалить ${getName(collection)}?`)) {
         return null
       }
+
       const parent = target.closest('[data-id]')
-      const collection = target.closest('ul.collection').classList[0]
       const { id } = parent.dataset
       try {
         const res = await axios.delete(`/api/${collection}/${id}`)

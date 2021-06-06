@@ -1,3 +1,8 @@
-const getFullName = obj => `${obj.surname} ${obj.name} ${obj.patronymic}`
+const getFullName = obj => {
+  if(!obj) {
+    return null
+  }
+  return `${obj.surname} ${obj.name} ${obj.patronymic}`
+}
 
 export default getFullName

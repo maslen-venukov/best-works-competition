@@ -23,13 +23,24 @@
             <tbody>
               <% rating.forEach(work => { %>
                 <tr>
-                  <td><%= work.author.fullname %></td>
-                  <td><%= work.author.organization %></td>
+                  <% if(work.author) { %>
+                    <td><%= work.author.fullname %></td>
+                    <td><%= work.author.organization %></td>
+                  <% } else { %>
+                    <td>—</td>
+                    <td>—</td>
+                  <% } %>
                   <td><%= work.name %></td>
                   <td><%= work.nomination %></td>
-                  <td><%= work.expert.fullname %></td>
-                  <td><%= work.expert.academic_degree %>/<%= work.expert.academic_rank %></td>
-                  <td><%= work.expert.organization %></td>
+                  <% if(work.expert) { %>
+                    <td><%= work.expert.fullname %></td>
+                    <td><%= work.expert.academic_degree %>/<%= work.expert.academic_rank %></td>
+                    <td><%= work.expert.organization %></td>
+                  <% } else { %>
+                    <td>—</td>
+                    <td>—</td>
+                    <td>—</td>
+                  <% } %>
                   <td><%= work.score %></td>
                 </tr>
               <% }) %>

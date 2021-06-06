@@ -13,16 +13,16 @@ const getRating = (scores, works, nominations, users, technicalExpertise) => {
       return {
         ...el,
         name: work.name,
-        author: {
+        author: author ? {
           fullname: getFullName(author),
           organization: author.organization,
-        },
-        expert: {
+        } : null,
+        expert: expert ? {
           fullname: getFullName(expert),
           organization: expert.organization,
           academic_degree: expert.academic_degree,
           academic_rank: expert.academic_rank
-        },
+        } : null,
         nomination
       }
     })

@@ -120,6 +120,21 @@ body {
   text-align: center;
 }
 
+.rating__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 20px 0 40px;
+}
+
+.rating__title {
+  margin: 0;
+}
+
+.rating__excel:hover {
+  color: #fff;
+}
+
 .expert-profile p:not(:last-child) {
   margin-bottom: 5px;
 }

@@ -6,7 +6,13 @@
       <%- include('partials/sidebar', { user }) %>
       <div class="col s10">
         <div class="container">
-          <h4 class="title">Рейтинг</h4>
+          <div class="rating__header">
+            <h4 class="rating__title title">Рейтинг</h4>
+            <a href="/uploads/rating.xlsx" class="rating__excel waves-effect waves-light btn">
+              <i class="material-icons left">file_download</i>
+              Экспорт в Excel
+            </a>
+          </div>
           <table class="rating__table">
             <thead>
               <tr>

@@ -1,3 +1,6 @@
+import path, { dirname } from 'path'
+import { fileURLToPath } from 'url'
+
 import User from '../models/User.js'
 import Work from '../models/Work.js'
 import Nomination from '../models/Nomination.js'
@@ -10,11 +13,25 @@ import checkAuth from '../utils/checkAuth.js'
 import groupReviewsByWork from '../utils/groupReviewsByWork.js'
 import getRating from '../utils/getRating.js'
 import sendError from '../utils/sendError.js'
+import writeExcelFile from '../utils/writeExcelFile.js'
+
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = dirname(__filename)
 
 class Controller {
   index(req, res) {
     try {
-      const user = checkAuth(req)
+      let user = null
+      try {
+        user = checkAuth(req)
+      } catch {
+        return res
+          .cookie('token', '', {
+            httpOnly: true,
+            maxAge: new Date(0)
+          })
+          .redirect('/')
+      }
       return res.render('index', { title: 'Главная', user, dark: true })
     } catch (e) {
       console.log(e)
@@ -194,8 +211,26 @@ class Controller {
       const technicalExpertise = await TechnicalExpertise.find().sort({ _id: -1 })
 
       const scores = groupReviewsByWork(expertReviews)
-
       const rating = getRating(scores, works, nominations, users, technicalExpertise)
+
+      const xlsxData = rating.reduce((acc, work) => {
+        const { author, expert, name, nomination, score } = work
+        const row = {
+          'ФИО участника': author ? author.fullname : '—',
+          'Организация': author ? author.organization : '—',
+          'Наименования работы': name,
+          'Номинация': nomination,
+          'ФИО эксперта': expert ? expert.fullname : '—',
+          'ученая степень/ученое звание': expert ? `${expert.academic_degree}/${expert.academic_rank}` : '—',
+          'Место работы': expert ? expert.organization : '—',
+          'Количество баллов': score
+        }
+        return acc = [...acc, row]
+      }, [])
+
+      const pathName = path.resolve(__dirname, '..', 'uploads', 'rating.xlsx')
+
+      writeExcelFile(xlsxData, pathName)
 
       return res.render('rating', { title: 'Рейтинг', user, rating })
     } catch (e) {

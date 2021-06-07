@@ -1,11 +1,8 @@
 const getFullName = person => {
-  if(!person) {
+  if(!person || !Object.keys(person).length) {
     return null
   }
-
-  const fullname = `${person.surname || ''} ${person.name || ''} ${person.patronymic || ''}`.trim()
-
-  return fullname ? fullname : null
+  return `${person.surname || ''} ${person.name || ''} ${person.patronymic || ''}`.trim()
 }
 
 export default getFullName

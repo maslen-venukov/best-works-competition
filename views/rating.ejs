@@ -24,6 +24,8 @@
                   <th>ученая степень/ученое звание</th>
                   <th>Место работы</th>
                   <th>Количество баллов</th>
+                  <th>Результат</th>
+                  <th>Причина</th>
               </tr>
             </thead>
             <tbody>
@@ -48,6 +50,33 @@
                     <td>—</td>
                   <% } %>
                   <td><%= work.score %></td>
+                  <td>соответствует</td>
+                  <td>—</td>
+                </tr>
+              <% }) %>
+              <% notAdmitted.forEach(work => { %>
+                <tr>
+                  <% if(work.author) { %>
+                    <td><%= work.author.fullname %></td>
+                    <td><%= work.author.organization %></td>
+                  <% } else { %>
+                    <td>—</td>
+                    <td>—</td>
+                  <% } %>
+                  <td><%= work.name %></td>
+                  <td><%= work.nomination %></td>
+                  <% if(work.expert) { %>
+                    <td><%= work.expert.fullname %></td>
+                    <td><%= work.expert.academic_degree %>/<%= work.expert.academic_rank %></td>
+                    <td><%= work.expert.organization %></td>
+                  <% } else { %>
+                    <td>—</td>
+                    <td>—</td>
+                    <td>—</td>
+                  <% } %>
+                  <td>—</td>
+                  <td>не соответствует</td>
+                  <td><%= work.rejectionReason %></td>
                 </tr>
               <% }) %>
           </table>

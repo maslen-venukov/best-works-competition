@@ -14,6 +14,7 @@ import groupReviewsByWork from '../utils/groupReviewsByWork.js'
 import getRating from '../utils/getRating.js'
 import sendError from '../utils/sendError.js'
 import writeExcelFile from '../utils/writeExcelFile.js'
+import getNotAdmittedWorks from '../utils/getNotAdmittedWorks.js'
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = dirname(__filename)
@@ -212,6 +213,7 @@ class Controller {
 
       const scores = groupReviewsByWork(expertReviews)
       const rating = getRating(scores, works, nominations, users, technicalExpertise)
+      const notAdmitted = getNotAdmittedWorks(technicalExpertise, works, users, nominations)
 
       const xlsxData = rating.reduce((acc, work) => {
         const { author, expert, name, nomination, score } = work
@@ -232,7 +234,7 @@ class Controller {
 
       writeExcelFile(xlsxData, pathName)
 
-      return res.render('rating', { title: 'Рейтинг', user, rating })
+      return res.render('rating', { title: 'Рейтинг', user, rating, notAdmitted })
     } catch (e) {
       console.log(e)
       return sendError(res)

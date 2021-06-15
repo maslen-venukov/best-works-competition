@@ -1,11 +1,9 @@
-@import url('./_normalize.css');
-@import url('./_reset.css');
+@import 'normalize';
+@import 'reset';
 
-:root {
-  --dark-color: #171820;
-  --accent-color: #ff004c;
-  --pink-color: #ee6e73;
-}
+$dark-color: #171820;
+$accent-color: #ff004c;
+$pink-color: #ee6e73;
 
 html,
 body {
@@ -19,14 +17,14 @@ body {
 
 .title {
   margin-bottom: 40px;
-}
 
-.title--small {
-  margin-bottom: 20px;
+  &--small {
+    margin-bottom: 20px;
+  }
 }
 
 .nav.dark {
-  background-color: var(--dark-color);
+  background-color: $dark-color;
 }
 
 .intro {
@@ -37,28 +35,28 @@ body {
   align-items: center;
   background: url('../images/bg.gif') center / cover no-repeat;
   padding-bottom: 25vh;
-}
 
-.intro input {
-  color: inherit;
-}
+  &__title {
+    font-size: 50px;
+  }
 
-.intro__title {
-  font-size: 50px;
-}
+  &__subtitle {
+    font-size: 32px;
+  }
 
-.intro__subtitle {
-  font-size: 32px;
+  input {
+    color: inherit;
+  }
 }
 
 .organizer {
   padding: 70px 0;
-}
 
-.organizer__caption {
-  font-size: 12px;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
+  &__caption {
+    font-size: 12px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+  }
 }
 
 .profile .col {
@@ -72,14 +70,14 @@ body {
   width: 16.6666666667%;
   height: 100vh;
   color: #fff;
-  background-color: var(--dark-color);
+  background-color: $dark-color;
   overflow-y: auto;
 }
 
 .btn,
 .btn:hover,
 .btn:active {
-  background-color: var(--accent-color);
+  background-color: $accent-color;
   transition: margin 0s;
 }
 
@@ -99,10 +97,12 @@ body {
   display: flex;
   flex-direction: column;
   justify-content: center;
-}
 
-.collection-actions li:not(:last-child) {
-  margin-bottom: 5px;
+  li {
+    &:not(:last-child) {
+      margin-bottom: 5px;
+    }
+  }
 }
 
 .check__info,
@@ -112,32 +112,37 @@ body {
 }
 
 .bg-dark {
-  background-color: var(--dark-color);
+  background-color: $dark-color;
 }
 
-.rating .container {
-  width: 100%;
-  max-width: 1100px;
-}
+.rating {
+  &__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 20px 0 40px;
+  }
 
-.rating__table th,
-.rating__table td {
-  text-align: center;
-}
+  &__title {
+    margin: 0;
+  }
 
-.rating__header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin: 20px 0 40px;
-}
+  &__excel {
+    &:hover {
+      color: #fff;
+    }
+  }
 
-.rating__title {
-  margin: 0;
-}
+  &__table {
+    th, td {
+      text-align: center;
+    }
+  }
 
-.rating__excel:hover {
-  color: #fff;
+  .container {
+    width: 100%;
+    max-width: 1100px;
+  }
 }
 
 .expert-profile p:not(:last-child) {

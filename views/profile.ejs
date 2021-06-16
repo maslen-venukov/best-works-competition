@@ -47,9 +47,16 @@
             <div class="card expert-profile">
               <div class="card-content">
                 <p><%= user.surname %> <%= user.name %> <%= user.patronymic %></p>
-                <p><%= user.position %>, <%= user.organization %></p>
-                <p><%= user.academic_rank %>, <%= user.academic_degree %></p>
-                <p><%= nominations.find(nomination => nomination._id.toString() === user.nomination.toString()).name %></p>
+                <% if(user.position && user.organization) { %>
+                  <p><%= user.position %>, <%= user.organization %></p>
+                <% } %>
+                <% if(user.academic_rank && user.academic_degree) { %>
+                  <p><%= user.academic_rank %>, <%= user.academic_degree %></p>
+                <% } %>
+                <% const nomination = user.nomination ? nominations.find(nomination => nomination._id.toString() === user.nomination.toString()) : null %>
+                <% if(nomination) { %>
+                  <p><%= nomination.name %></p>
+                <% } %>
               </div>
             </div>
           <% } %>

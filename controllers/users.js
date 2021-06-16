@@ -2,6 +2,10 @@ import jwt from 'jsonwebtoken'
 import bcrypt from 'bcryptjs'
 
 import User from '../models/User.js'
+import Work from '../models/Work.js'
+import ExpertReview from '../models/ExpertReview.js'
+import TechnicalExpertise from '../models/TechnicalExpertise.js'
+
 import errorHandler from '../utils/errorHandler.js'
 
 const maxAge = 1000 * 3600 * 24
@@ -177,6 +181,14 @@ class Controller {
       }
 
       await User.deleteOne({ _id: id })
+      const works = await Work.find({ author: id })
+
+      await Work.deleteMany({ author: id })
+
+      const workIds = works.map(work => work._id)
+
+      await TechnicalExpertise.deleteMany({ work: workIds })
+      await ExpertReview.deleteMany({ work: workIds })
 
       return res.json({ message: 'Пользователь удален' })
     } catch (e) {

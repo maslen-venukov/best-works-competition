@@ -29,7 +29,7 @@ class Controller {
         return res
           .cookie('token', '', {
             httpOnly: true,
-            maxAge: new Date0
+            maxAge: new Date(0)
           })
           .redirect('/')
       }
